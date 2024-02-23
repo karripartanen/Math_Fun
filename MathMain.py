@@ -2,6 +2,7 @@ import sympy
 import numpy as np
 import time
 import os
+from colorama import Back as CB, Fore as CF, Style as CS
 from sympy import symbols, solve
 # calculate some damn matrices or SOE if u feel like it
 
@@ -40,9 +41,9 @@ def decimal_to_binary(decimal):
         binary_num = bin(decimal)
         return binary_num
     except ValueError as ve:
-        return str(ve)
+        return None
     except TypeError:
-        return "Invalid input! Enter a valid integer."
+        return None
 
 
 def binary_to_decimal(binary):
@@ -50,7 +51,7 @@ def binary_to_decimal(binary):
         decimal = int(binary, 2)
         return decimal
     except ValueError:
-        return "Invalid input! Enter a valid binary number."
+        return None
 
 
 def hex_to_binary(hexadecimal):
@@ -59,7 +60,7 @@ def hex_to_binary(hexadecimal):
         binary = bin(decimal)[2:]
         return binary
     except ValueError:
-        return "Invalid input! Enter a valid hexadecimal."
+        return None
 
 
 def create_matrix(rows, cols):
@@ -99,14 +100,14 @@ while True:
     try:
         clear()
         valid_option = True
-        print("Choose one:")
-        print("1. Calculate Matrices")
+        print(f"{CF.LIGHTGREEN_EX}Choose from the following:{CF.RESET}")
+        print("\n1. Calculate Matrices")
         print("2. Solve Systems of Equations")
         print("3. Decimal to binary/hex")
         print("4. Binary to decimal/hex")
         print("5. Hexadecimal to decimal/binary.")
-        print("6. Exit or press CTRL+C")
-        option = input("Enter your choice (1 / 2 / 3...): ")
+        print(f"{CF.RED}6. Exit the program{CF.RESET}")
+        option = input(f"{CF.YELLOW}\nEnter your choice (1 / 2 / 3...):{CF.RESET} ")
 
         if option == '1':
             rows = int(input("Enter the number of rows in the matrix: "))
@@ -136,42 +137,55 @@ while True:
 
         elif option == "3":
             clear()
-            decimal = input("Enter a decimal number: ")
-            binary = decimal_to_binary(decimal)
-            print(f"Binary representation: {binary[2:]}")
-            hexadecimal = hex(int(decimal))[2:]
-            print(f"Corresponding hexadecimal: {hexadecimal}")
+            while True:
+                decimal = input("Enter a decimal number: ")
+                binary = decimal_to_binary(decimal)
+                if binary is not None:
+                    print(f"Binary representation: {binary[2:]}")
+                    hexadecimal = hex(int(decimal))[2:]
+                    print(f"Corresponding hexadecimal: {hexadecimal}")
+                    input("\nPress ENTER to continue: ")
+                    break
+                else:
+                    print("Invalid input! Enter a valid decimal.")
 
         elif option == "4":
             clear()
-            binary = input("Enter a binary number (ie. 01011101): ")
-            decimal = binary_to_decimal(binary)
-            print(f"Decimal representation: {decimal}")
-            hexadecimal = hex(decimal)[2:]
-            print(f"Corresponding hexadecimal: {hexadecimal}")
+            while True:
+                binary = input("Enter a binary number (ie. 01011101): ")
+                decimal = binary_to_decimal(binary)
+                if decimal is not None:
+                    clear()
+                    print(f"Decimal representation: {decimal}")
+                    hexadecimal = hex(decimal)[2:]
+                    print(f"Corresponding hexadecimal: {hexadecimal}")
+                    input("\nPress ENTER to continue: ")
+                    break
+                else:
+                    print("Invalid input! Enter a valid hexadecimal.")
 
         elif option == "5":
             clear()
-            hexadecimal = input("Enter a hexadecimal number: ")
-            binary = hex_to_binary(hexadecimal)
-            print(f"Binary representation: {binary}")
-            decimal = int(binary, 2)
-            print(f"Corresponding decimal: {decimal}")
+            while True:
+                hexadecimal = input("Enter a hexadecimal number: ")
+                binary = hex_to_binary(hexadecimal)
+                if binary is not None:
+                    clear()
+                    print(f"Hexadecimal: {hexadecimal}")
+                    print(f"Binary representation: {binary}")
+                    decimal = int(binary, 2)
+                    print(f"Corresponding decimal: {decimal}")
+                    input("\nPress ENTER to continue: ")
+                    break
+                else:
+                    print("Invalid input! Enter a valid hexadecimal.")
 
         elif option == "6":
             print("Exiting program...")
             break
 
         else:
-            valid_option = False
             print("Invalid input! Type in '1' or '2'")
-
-        if valid_option:
-            repeat = input("Do you want to continue? (Y/N): ").lower().strip()
-            if repeat != 'y':
-                print("Exiting the program")
-                time.sleep(2)
-                break
 
     except KeyboardInterrupt:
         print("\nUser interrupted the program. Exiting.")
