@@ -32,6 +32,36 @@ def solve_systems():
         print(f"Error solving the equations: {e}")
 
 
+def decimal_to_binary(decimal):
+    try:
+        decimal = int(decimal)
+        if decimal < 0:
+            raise ValueError("Decimal number must be positive.")
+        binary_num = bin(decimal)
+        return binary_num
+    except ValueError as ve:
+        return str(ve)
+    except TypeError:
+        return "Invalid input! Enter a valid integer."
+
+
+def binary_to_decimal(binary):
+    try:
+        decimal = int(binary, 2)
+        return decimal
+    except ValueError:
+        return "Invalid input! Enter a valid binary number."
+
+
+def hex_to_binary(hexadecimal):
+    try:
+        decimal = int(hexadecimal, 16)
+        binary = bin(decimal)[2:]
+        return binary
+    except ValueError:
+        return "Invalid input! Enter a valid hexadecimal."
+
+
 def create_matrix(rows, cols):
     matrix = []
     print("Enter the elements of the matrix row-wise")
@@ -72,7 +102,11 @@ while True:
         print("Choose one:")
         print("1. Calculate Matrices")
         print("2. Solve Systems of Equations")
-        option = input("Enter your choice (1 / 2): ")
+        print("3. Decimal to binary/hex")
+        print("4. Binary to decimal/hex")
+        print("5. Hexadecimal to decimal/binary.")
+        print("6. Exit or press CTRL+C")
+        option = input("Enter your choice (1 / 2 / 3...): ")
 
         if option == '1':
             rows = int(input("Enter the number of rows in the matrix: "))
@@ -99,6 +133,35 @@ while True:
 
         elif option == "2":
             solve_systems()
+
+        elif option == "3":
+            clear()
+            decimal = input("Enter a decimal number: ")
+            binary = decimal_to_binary(decimal)
+            print(f"Binary representation: {binary[2:]}")
+            hexadecimal = hex(int(decimal))[2:]
+            print(f"Corresponding hexadecimal: {hexadecimal}")
+
+        elif option == "4":
+            clear()
+            binary = input("Enter a binary number (ie. 01011101): ")
+            decimal = binary_to_decimal(binary)
+            print(f"Decimal representation: {decimal}")
+            hexadecimal = hex(decimal)[2:]
+            print(f"Corresponding hexadecimal: {hexadecimal}")
+
+        elif option == "5":
+            clear()
+            hexadecimal = input("Enter a hexadecimal number: ")
+            binary = hex_to_binary(hexadecimal)
+            print(f"Binary representation: {binary}")
+            decimal = int(binary, 2)
+            print(f"Corresponding decimal: {decimal}")
+
+        elif option == "6":
+            print("Exiting program...")
+            break
+
         else:
             valid_option = False
             print("Invalid input! Type in '1' or '2'")
