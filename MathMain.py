@@ -4,11 +4,31 @@ import time
 import os
 from colorama import Back as CB, Fore as CF, Style as CS
 from sympy import symbols, solve
+import json
+import requests as req
 # calculate some damn matrices or SOE if u feel like it
 
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def chuck():
+    try:
+        request = "https://api.chucknorris.io/jokes/random"
+        response = req.get(request).json()
+        return response['value']
+    except Exception as e:
+        return None
+
+
+def random_fact():
+    try:
+        request = "https://useless-facts.sameerkumar.website/api"
+        response = req.get(request).json()
+        return response['data']
+    except Exception as e:
+        return None
 
 
 def solve_systems():
@@ -28,7 +48,7 @@ def solve_systems():
         solution = solve(equations, (x, y, z))
         clear()
         print(f"Equations: {equations}")
-        print(f"Solution: {solution}")
+        print(f"Solution: {CF.LIGHTGREEN_EX}{solution}{CF.RESET}")
     except Exception as e:
         print(f"Error solving the equations: {e}")
 
@@ -63,6 +83,24 @@ def hex_to_binary(hexadecimal):
         return None
 
 
+def calc_volume(length, width, height):
+    try:
+        length = float(length)
+        width = float(width)
+        height = float(height)
+
+        if length <= 0 or width <= 0 or height <= 0:
+            raise ValueError("Dimensions must be positive.")
+
+        volume = length * width * height
+        return volume
+
+    except ValueError as ve:
+        return None
+    except TypeError:
+        return None
+
+
 def create_matrix(rows, cols):
     matrix = []
     print("Enter the elements of the matrix row-wise")
@@ -85,7 +123,7 @@ def create_matrix(rows, cols):
 
 def print_matrix(matrix):
     for row in matrix:
-        print(row)
+        print(f"{CF.LIGHTGREEN_EX}{row}{CF.RESET}")
 
 
 def check_matrix(matrix):
@@ -106,10 +144,14 @@ while True:
         print("3. Decimal to binary/hex")
         print("4. Binary to decimal/hex")
         print("5. Hexadecimal to decimal/binary.")
-        print(f"{CF.RED}6. Exit the program{CF.RESET}")
+        print("6. Calculate volume of an object.")
+        print("7. Random Chuck Norris joke.")
+        print("8. Random fact for you ;).")
+        print(f"{CF.RED}8. Exit the program{CF.RESET}")
         option = input(f"{CF.YELLOW}\nEnter your choice (1 / 2 / 3...):{CF.RESET} ")
 
         if option == '1':
+            clear()
             rows = int(input("Enter the number of rows in the matrix: "))
             cols = int(input("Enter the number of columns in the matrix: "))
 
@@ -121,10 +163,10 @@ while True:
                     print_matrix(matrix)
 
                     matrix_t = np.transpose(matrix)
-                    print(f"\nTranspose =\n{matrix_t}\n")
+                    print(f"\nTranspose =\n{CF.LIGHTGREEN_EX}{matrix_t}{CF.RESET}\n")
 
                     determinant = np.linalg.det(matrix)
-                    print(f"Determinant = {determinant:.1f}\n")
+                    print(f"Determinant = {CF.LIGHTGREEN_EX}{determinant:.1f}{CF.RESET}\n")
 
                     input("Press ENTER to continue.")
                     clear()
@@ -141,9 +183,9 @@ while True:
                 decimal = input("Enter a decimal number: ")
                 binary = decimal_to_binary(decimal)
                 if binary is not None:
-                    print(f"Binary representation: {binary[2:]}")
+                    print(f"Binary representation: {CF.LIGHTGREEN_EX}{binary[2:]}{CF.RESET}")
                     hexadecimal = hex(int(decimal))[2:]
-                    print(f"Corresponding hexadecimal: {hexadecimal}")
+                    print(f"Corresponding hexadecimal: {CF.LIGHTGREEN_EX}{hexadecimal}{CF.RESET}")
                     input("\nPress ENTER to continue: ")
                     break
                 else:
@@ -156,13 +198,13 @@ while True:
                 decimal = binary_to_decimal(binary)
                 if decimal is not None:
                     clear()
-                    print(f"Decimal representation: {decimal}")
+                    print(f"Decimal representation: {CF.LIGHTGREEN_EX}{decimal}{CF.RESET}")
                     hexadecimal = hex(decimal)[2:]
-                    print(f"Corresponding hexadecimal: {hexadecimal}")
+                    print(f"Corresponding hexadecimal: {CF.LIGHTGREEN_EX}{hexadecimal}{CF.RESET}")
                     input("\nPress ENTER to continue: ")
                     break
                 else:
-                    print("Invalid input! Enter a valid hexadecimal.")
+                    print("Invalid input! Enter a valid binary.")
 
         elif option == "5":
             clear()
@@ -171,21 +213,55 @@ while True:
                 binary = hex_to_binary(hexadecimal)
                 if binary is not None:
                     clear()
-                    print(f"Hexadecimal: {hexadecimal}")
-                    print(f"Binary representation: {binary}")
+                    print(f"Hexadecimal: {CF.LIGHTGREEN_EX}{hexadecimal}{CF.RESET}")
+                    print(f"Binary representation: {CF.LIGHTGREEN_EX}{binary}{CF.RESET}")
                     decimal = int(binary, 2)
-                    print(f"Corresponding decimal: {decimal}")
+                    print(f"Corresponding decimal: {CF.LIGHTGREEN_EX}{decimal}{CF.RESET}")
                     input("\nPress ENTER to continue: ")
                     break
                 else:
                     print("Invalid input! Enter a valid hexadecimal.")
 
         elif option == "6":
+            clear()
+            while True:
+                length_str = input("Enter the length in cm: ")
+                width_str = input("Enter the width in cm: ")
+                height_str = input("Enter the height in cm: ")
+                volume = calc_volume(length_str, width_str, height_str)
+                if volume is not None:
+                    clear()
+                    print(f"Length: {length_str}, Width: {width_str}cm, Height: {height_str}")
+                    print(f"Volume: {CF.LIGHTGREEN_EX}{volume}cm³{CF.RESET}")
+                    input("Press ENTER to continue: ")
+                    break
+                else:
+                    print("Invalid input. Enter valid dimensions.")
+
+        elif option == "7":
+            clear()
+            joke = chuck()
+            if joke is not None:
+                print(f"{CF.LIGHTGREEN_EX}{joke}{CF.RESET}")
+                input("\nPress ENTER to continue: ")
+            else:
+                print("Error bringing the joke to your face.")
+
+        elif option == "8":
+            clear()
+            fact = random_fact()
+            if fact is not None:
+                print(f"{CF.LIGHTGREEN_EX}{fact}{CF.RESET}")
+                input("\nPress ENTER to continue.")
+            else:
+                print("Error presenting a random fact :(")
+
+        elif option == "8":
             print("Exiting program...")
             break
 
         else:
-            print("Invalid input! Type in '1' or '2'")
+            print("Invalid input! Type in a number like '1' / '2' /...")
 
     except KeyboardInterrupt:
         print("\nUser interrupted the program. Exiting.")
