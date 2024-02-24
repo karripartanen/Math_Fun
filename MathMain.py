@@ -13,6 +13,27 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
+def country_info(country):
+    try:
+        request = f"https://restcountries.com/v3.1/name/{country}"
+        response = req.get(request)
+        response.raise_for_status()
+        data = response.json()
+
+        if isinstance(data, list) and data:
+            country_info = data[0]
+            print(f"\nCountry Information for {country}:")
+            print(f"\nName: {country_info['name']['common']}")
+            print(f"Capital: {country_info['capital'][0]}")
+            print(f"Population: {country_info['population']}")
+            print(f"Area: {country_info['area']} square kilometers")
+            print(f"Region: {country_info['region']}")
+        else:
+            print(f"Learn to type.")
+    except req.exceptions.RequestException as e:
+        print(f"Learn to type.")
+
+
 def chuck():
     try:
         request = "https://api.chucknorris.io/jokes/random"
@@ -145,9 +166,10 @@ while True:
         print("4. Binary to decimal/hex")
         print("5. Hexadecimal to decimal/binary.")
         print("6. Calculate volume of an object.")
-        print("7. Random Chuck Norris joke.")
-        print("8. Random fact for you ;).")
-        print(f"{CF.RED}8. Exit the program{CF.RESET}")
+        print("7. Country info.")
+        print("8. Random Chuck Norris joke.")
+        print("9. Random fact for you ;).")
+        print(f"{CF.RED}10. Exit the program{CF.RESET}")
         option = input(f"{CF.YELLOW}\nEnter your choice (1 / 2 / 3...):{CF.RESET} ")
 
         if option == '1':
@@ -233,12 +255,18 @@ while True:
                     clear()
                     print(f"Length: {length_str}, Width: {width_str}cm, Height: {height_str}")
                     print(f"Volume: {CF.LIGHTGREEN_EX}{volume}cm³{CF.RESET}")
-                    input("Press ENTER to continue: ")
+                    input("\nPress ENTER to continue: ")
                     break
                 else:
                     print("Invalid input. Enter valid dimensions.")
 
         elif option == "7":
+            clear()
+            country = input("Enter a country name: ")
+            country_info(country)
+            input("\nPress ENTER to continue.")
+
+        elif option == "8":
             clear()
             joke = chuck()
             if joke is not None:
@@ -247,7 +275,7 @@ while True:
             else:
                 print("Error bringing the joke to your face.")
 
-        elif option == "8":
+        elif option == "9":
             clear()
             fact = random_fact()
             if fact is not None:
@@ -256,7 +284,7 @@ while True:
             else:
                 print("Error presenting a random fact :(")
 
-        elif option == "8":
+        elif option == "10":
             print("Exiting program...")
             break
 
